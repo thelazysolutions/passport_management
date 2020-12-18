@@ -1,29 +1,65 @@
+from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
-from flask import Flask, flash, redirect, render_template, request, session, abort
+from flask import Flask, flash, redirect, render_template, request, session, abort, get_flashed_messages
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SQLALCHEMY_DATABASE_URI")
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+db = SQLAlchemy(app)
+
+# Defination of Schema
+# Need to Move this to separate python file
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    password = db.Column(db.String, unique=True, nullable=False)
+    email = db.Column(db.String, unique=True, nullable=False)
+    name = db.Column(db.String, unique=True, nullable=False)
+    user_type = db.Column(db.Integer, unique=True, nullable=False)
+
+
+# db.session.add(User(password="Flask", email="example@example.com",
+#                     name="flask-name", user_type=2))
+
+# db.session.commit()
+
+# users = User.query.all()
+# print(users)
+
+
 @app.route('/')
-def home():
-    if not session.get('logged_in'):
+def home(result=None):
+    if not session.get('logged_in') and not result:
         return render_template('login.html')
     else:
-        return "Hello User!  <a href=\"/logout\">Logout</a>"
+        # Based on the user_id passed, print Details, URLS and all.
+        return render_template('dashboard.html', username=result.name, user_id=result.user_type)
+
 
 @app.route('/login', methods=['POST'])
 def do_admin_login():
-    if request.form['password'] == 'admin' and request.form['username'] == 'admin':
+    # query to check if Email & Pwd match
+    result = User.query.filter_by(
+        password=request.form['password'], email=request.form['email']).first()
+    if result:
         session['logged_in'] = True
     else:
         flash('wrong password!')
-    return home()
+        return str(get_flashed_messages())
+    return home(result)
+
 
 @app.route("/logout")
 def logout():
     session['logged_in'] = False
     return home()
 
+
 if __name__ == "__main__":
-    
     app.run(debug=True)

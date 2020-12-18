@@ -1,0 +1,20 @@
+<link rel="stylesheet" href="/static/style.css" type="text/css">
+<!-- &#123;% block body %&#125; -->
+
+<form action="/login" method="POST">
+  <div class="login">
+    <div class="login-screen">
+      <div class="app-title">
+        <h1>Dashboard</h1>
+      </div>
+        Welcome {{username}} <br />
+        Your User Type is  {{ "Employee" if user_id == 1 else "Admin" }}<br />
+        Click here to Logout. 
+        <br />
+        <a href="/logout">Logout</a>
+    </div>
+  </div>
+</form>
+
+
+<!-- &#123;% endblock %&#125; -->
