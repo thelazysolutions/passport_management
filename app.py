@@ -25,11 +25,26 @@ class User(db.Model):
 
 class Client(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    password = db.Column(db.String, unique=True, nullable=False)
-    email = db.Column(db.String, unique=True, nullable=False)
     name = db.Column(db.String, unique=True, nullable=False)
-    user_type = db.Column(db.Integer, unique=True, nullable=False)
-
+    number = db.Column(db.String, unique=True, nullable=False)
+    number_alt = db.Column(db.String, unique=True, nullable=True)
+    email = db.Column(db.String, unique=True, nullable=False)
+    email_alt = db.Column(db.String, unique=True, nullable=False)
+    number_alt = db.Column(db.String, unique=True, nullable=True)
+    location = db.Column(db.String, unique=True, nullable=False)
+    source = db.Column(db.String, unique=True, nullable=False)
+    referred_by = db.Column(db.String, unique=True, nullable=True)
+    process_type = db.Column(db.String, unique=True, nullable=False)
+    first_registration_of = db.Column(db.String, unique=True, nullable=False)
+    lead_type = db.Column(db.String, unique=True, nullable=True)
+    assigned_to = db.Column(db.String, unique=True, nullable=False)
+    search_location = db.Column(db.String, unique=True, nullable=False)
+    search_taluka = db.Column(db.String, unique=True, nullable=True)
+    wa_group_name = db.Column(db.String, unique=True, nullable=False)
+    search_required = db.Column(db.Boolean, unique=True, nullable=False)
+    wa_group = db.Column(db.Boolean, unique=True, nullable=True)
+    first_contact_date = db.Column(db.DateTime, unique=True, nullable=False)
+    
 
 
 @app.route('/')
