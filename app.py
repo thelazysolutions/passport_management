@@ -21,26 +21,30 @@ class User(db.Model):
     password = db.Column(db.String, unique=True, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
     name = db.Column(db.String, unique=True, nullable=False)
+    user_type = db.Column(db.Integer, unique=False, nullable=False)
+
+class Client(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    password = db.Column(db.String, unique=True, nullable=False)
+    email = db.Column(db.String, unique=True, nullable=False)
+    name = db.Column(db.String, unique=True, nullable=False)
     user_type = db.Column(db.Integer, unique=True, nullable=False)
 
-
-# db.session.add(User(password="Flask", email="example@example.com",
-#                     name="flask-name", user_type=2))
-
-# db.session.commit()
-
-# users = User.query.all()
-# print(users)
 
 
 @app.route('/')
 def home(result=None):
+    print(not session.get('logged_in') and not result)
     if not session.get('logged_in') and not result:
         return render_template('login.html')
     else:
         # Based on the user_id passed, print Details, URLS and all.
-        return render_template('dashboard.html', username=result.name, user_id=result.user_type)
-
+        # return render_template('dashboard.html', username=result.name, user_id=result.user_type)
+        return render_template('dash/index.html', username=result.name, user_id=result.user_type)
+    
+@app.route('/test')
+def test():
+    return render_template('dash/index.html')
 
 @app.route('/login', methods=['POST'])
 def do_admin_login():
@@ -51,7 +55,7 @@ def do_admin_login():
         session['logged_in'] = True
     else:
         flash('wrong password!')
-        return str(get_flashed_messages())
+        # return str(get_flashed_messages())
     return home(result)
 
 
