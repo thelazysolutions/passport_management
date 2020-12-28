@@ -1,0 +1,237 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>PCFG - Dashboard</title>
+    <meta name="generator" content="">
+
+    <link href="dashboard.css" rel="stylesheet">
+    <link href="index.css" rel="stylesheet">
+
+    <script src="jquery-1.12.4.min.js"></script>
+    <script src="skrollr.min.js"></script>
+    <script src="util.min.js"></script>
+    <script src="scrollspy.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            function skrollrInit() {
+                skrollr.init({ forceHeight: false, mobileCheck: function () { return false; }, smoothScrolling: false });
+            }
+            skrollrInit();
+        });
+    </script>
+</head>
+
+<body data-spy="scroll">
+    
+    <div id="container">
+        <div id="wb_Card1"
+            style="position:absolute;left:51px;top:78px;width:388px;height:229px;text-align:center;z-index:42;">
+            <div id="Card1-card-header">Login Details</div>
+            <div id="Card1-card-body">
+                <div id="Card1-card-item1">User Name</div>
+                <div id="Card1-card-item2">Email: test@test.com</div>
+                <div id="Card1-card-item3">User Type: Admin</div>
+                <hr id="Card1-card-item4">
+                <div id="Card1-card-item5"><a href="https://www.wysiwygwebbuilder.com">Edit</a></div>
+            </div>
+        </div>
+
+        {% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% block page_content %}{% endblock %}
+</div>
+{% endblock %}
+
+
+        <div id="wb_Form1" style="position:absolute;left:49px;top:332px;width:872px;height:476px;z-index:43;">
+            <form name="Form1" method="post" action="/foo" enctype="multipart/form-data"
+                id="Form1">
+                <input type="submit" id="Button1" name="Submit" value="Submit"
+                    style="position:absolute;left:740px;top:416px;width:96px;height:25px;z-index:2;">
+                <div id="wb_Text1"
+                    style="position:absolute;left:273px;top:22px;width:372px;height:22px;text-align:center;z-index:3;">
+                    <span style="color:#000000;font-family:Arial;font-size:24px;">Add a New Enquiry</span>
+                </div>
+                <hr id="Line1" style="position:absolute;left:16px;top:57px;width:840px;z-index:4;">
+                <label for="Editbox1" id="Label1"
+                    style="position:absolute;left:68px;top:89px;width:89px;height:29px;line-height:29px;z-index:5;">Client
+                    Name: </label>
+                <input type="text" id="Editbox1"
+                    style="position:absolute;left:68px;top:122px;width:86px;height:16px;z-index:6;" name="Editbox1"
+                    value="" spellcheck="false">
+                <label for="" id="Label9"
+                    style="position:absolute;left:537px;top:176px;width:87px;height:29px;line-height:29px;z-index:7;">Referred
+                    By:</label>
+                <label for="" id="Label8"
+                    style="position:absolute;left:215px;top:176px;width:122px;height:29px;line-height:29px;z-index:8;">First
+                    Contact Date:</label>
+                <label for="" id="Label7"
+                    style="position:absolute;left:530px;top:90px;width:103px;height:29px;line-height:29px;z-index:9;">Client
+                    Email ID:</label>
+                <label for="" id="Label5"
+                    style="position:absolute;left:699px;top:176px;width:89px;height:29px;line-height:29px;z-index:10;">Process
+                    Type:</label>
+                <label for="" id="Label4"
+                    style="position:absolute;left:407px;top:176px;width:51px;height:29px;line-height:29px;z-index:11;">Source:</label>
+                <label for="Editbox5" id="Label3"
+                    style="position:absolute;left:223px;top:78px;width:120px;height:52px;line-height:52px;z-index:12;">Client
+                    Mobile No.</label>
+                <label for="" id="Label2"
+                    style="position:absolute;left:370px;top:94px;width:132px;height:18px;line-height:18px;z-index:13;">Client
+                    Alt Mobile No.</label>
+                <label for="" id="Label6"
+                    style="position:absolute;left:63px;top:176px;width:98px;height:29px;line-height:29px;z-index:14;">Client
+                    Location:</label>
+                <input type="text" id="Editbox6"
+                    style="position:absolute;left:69px;top:213px;width:86px;height:16px;z-index:15;" name="Editbox2"
+                    value="" spellcheck="false">
+                <input type="text" id="Editbox5"
+                    style="position:absolute;left:232px;top:122px;width:86px;height:16px;z-index:16;" name="Editbox3"
+                    value="" spellcheck="false">
+                <input type="text" id="Editbox4"
+                    style="position:absolute;left:392px;top:122px;width:86px;height:16px;z-index:17;" name="Editbox4"
+                    value="" spellcheck="false">
+                <input type="text" id="Editbox3"
+                    style="position:absolute;left:537px;top:122px;width:86px;height:16px;z-index:18;" name="Editbox5"
+                    value="" spellcheck="false">
+                <input type="text" id="Editbox2"
+                    style="position:absolute;left:700px;top:122px;width:86px;height:16px;z-index:19;" name="Editbox6"
+                    value="" spellcheck="false">
+                <label for="" id="Label11"
+                    style="position:absolute;left:681px;top:90px;width:127px;height:29px;line-height:29px;z-index:20;">Client
+                    Alt Email ID:</label>
+                <input type="text" id="Editbox12"
+                    style="position:absolute;left:530px;top:213px;width:86px;height:16px;z-index:21;" name="Editbox7"
+                    value="" spellcheck="false">
+                <input type="text" id="Editbox11"
+                    style="position:absolute;left:392px;top:213px;width:86px;height:16px;z-index:22;" name="Editbox8"
+                    value="" spellcheck="false">
+                <input type="date" id="Editbox10"
+                    style="position:absolute;left:223px;top:213px;width:99px;height:16px;z-index:23;" name="Editbox9"
+                    value="" spellcheck="false">
+                <input type="text" id="Editbox9"
+                    style="position:absolute;left:700px;top:213px;width:86px;height:16px;z-index:24;" name="Editbox10"
+                    value="" spellcheck="false">
+                <input type="text" id="Editbox8"
+                    style="position:absolute;left:69px;top:292px;width:86px;height:16px;z-index:25;" name="Editbox11"
+                    value="" spellcheck="false">
+                <input type="text" id="Editbox7"
+                    style="position:absolute;left:232px;top:292px;width:86px;height:16px;z-index:26;" name="Editbox12"
+                    value="" spellcheck="false">
+                <label for="" id="Label16"
+                    style="position:absolute;left:238px;top:255px;width:76px;height:29px;line-height:29px;z-index:27;">Lead
+                    Type:</label>
+                <label for="" id="Label15"
+                    style="position:absolute;left:379px;top:255px;width:106px;height:29px;line-height:29px;z-index:28;">Search
+                    Required:</label>
+                <label for="" id="Label14"
+                    style="position:absolute;left:535px;top:255px;width:89px;height:29px;line-height:29px;z-index:29;">Assigned
+                    To:</label>
+                <label for="" id="Label13"
+                    style="position:absolute;left:691px;top:255px;width:107px;height:29px;line-height:29px;z-index:30;">Search
+                    Location:</label>
+                <label for="" id="Label12"
+                    style="position:absolute;left:63px;top:341px;width:93px;height:29px;line-height:29px;z-index:31;">Search
+                    Taluka:</label>
+                <label for="" id="Label10"
+                    style="position:absolute;left:44px;top:255px;width:136px;height:29px;line-height:29px;z-index:32;">First
+                    Registration of:</label>
+                <div id="wb_FlipSwitch1"
+                    style="position:absolute;left:404px;top:292px;width:72px;height:26px;z-index:33;">
+                    <input type="checkbox" name="radio1" id="FlipSwitch1" value="">
+                    <label id="FlipSwitch1-label" for="FlipSwitch1">
+                        <span id="FlipSwitch1-inner"></span>
+                        <span id="FlipSwitch1-switch"></span>
+                    </label>
+                </div>
+                <div id="wb_FlipSwitch2"
+                    style="position:absolute;left:250px;top:384px;width:60px;height:26px;z-index:34;">
+                    <input type="checkbox" name="radio2" id="FlipSwitch2" value="">
+                    <label id="FlipSwitch2-label" for="FlipSwitch2">
+                        <span id="FlipSwitch2-inner"></span>
+                        <span id="FlipSwitch2-switch"></span>
+                    </label>
+                </div>
+                <input type="text" id="Editbox15"
+                    style="position:absolute;left:537px;top:292px;width:86px;height:16px;z-index:35;" name="Editbox13"
+                    value="" spellcheck="false">
+                <input type="text" id="Editbox14"
+                    style="position:absolute;left:700px;top:292px;width:86px;height:16px;z-index:36;" name="Editbox14"
+                    value="" spellcheck="false">
+                <input type="text" id="Editbox13"
+                    style="position:absolute;left:68px;top:384px;width:86px;height:16px;z-index:37;" name="Editbox15"
+                    value="" spellcheck="false">
+                <label for="" id="Label19"
+                    style="position:absolute;left:385px;top:341px;width:163px;height:29px;line-height:29px;z-index:38;">Whatsapp
+                    Group Name:</label>
+                <label for="" id="Label18"
+                    style="position:absolute;left:189px;top:341px;width:174px;height:29px;line-height:29px;z-index:39;">Whastapp
+                    Group Created: </label>
+                <input type="text" id="Editbox16"
+                    style="position:absolute;left:411px;top:384px;width:86px;height:16px;z-index:40;" name="Editbox16"
+                    value="" spellcheck="false">
+            </form>
+        </div>
+        <table style="position:absolute;left:509px;top:78px;width:425px;height:231px;z-index:44;" id="Table1">
+            <tbody>
+                <tr>
+                    <td class="cell0">
+                        <p style="font-size:11px;line-height:12px;color:#000000;">&nbsp;</p>
+                    </td>
+                    <td class="cell1">
+                        <p style="font-size:11px;line-height:12px;color:#000000;">&nbsp;</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="cell0">
+                        <p style="font-size:11px;line-height:12px;color:#000000;">&nbsp;</p>
+                    </td>
+                    <td class="cell1">
+                        <p style="font-size:11px;line-height:12px;color:#000000;">&nbsp;</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="cell2">
+                        <p style="font-size:11px;line-height:12px;color:#000000;">&nbsp;</p>
+                    </td>
+                    <td class="cell3">
+                        <p style="font-size:11px;line-height:12px;color:#000000;">&nbsp;</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="PageHeader"
+        style="position: fixed; overflow: hidden; text-align: center; left: 0px; top: 0px; right: 0px; height: 50px; z-index: 7777; background: rgba(33, 33, 33, 0.333);"
+        data-top="background:rgba(33, 33, 33, 0.0);" data--50-top="background:rgba(33, 33, 33, 1.0);"
+        class="skrollable skrollable-between">
+        <div id="PageHeader_Container"
+            style="width:970px;position:relative;margin-left:auto;margin-right:auto;text-align:left;">
+            <div id="wb_CssMenu1" style="position:absolute;left:607px;top:5px;width:355px;height:40px;z-index:0;">
+                <ul id="CssMenu1" role="menubar" class="nav">
+                    <li class="nav-item firstmain"><a role="menuitem" class="nav-link" href="" target="_self">Logout</a>
+                    </li>
+                </ul>
+            </div>
+            <div id="wb_CssMenu2" style="position:absolute;left:8px;top:5px;width:161px;height:41px;z-index:1;">
+                <ul id="CssMenu2" role="menubar" class="nav">
+                    <li class="nav-item firstmain"><a role="menuitem" class="nav-link" href="#top"
+                            target="_self">PCFG&nbsp;-&nbsp;Dashboard</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
