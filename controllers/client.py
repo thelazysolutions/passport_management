@@ -1,5 +1,5 @@
 from flask import Flask, Blueprint, request
-from db.database import Client, User, connection, select, delete
+from db.database import Client, User, connection, select, delete, insert, update
 
 client = Blueprint('client', __name__, template_folder='templates')
 
@@ -36,7 +36,6 @@ def viewOne(id):
     if(not ResultSet):
         return "empty set"
     return str(ResultSet)
-
 
 
 @client.route('/<id>', methods=["DELETE"])
@@ -79,13 +78,29 @@ def updateOne(id):
     ResultSet = ResultProxy.fetchone()
     if(not ResultSet):
         return "empty set"
-    
-    # Read from the JSON
-    # Save query data into another JSON
-    # update it with the JSON of Request
-    # Update into the DB
-    # return str(ResultSet)
+
+    if('name' in req_data or 'email' in req_data or 'pwd' in req_data or 'user_type' in req_data):
+        query = select([User]).where(User.columns.id == id)
+        ResultProxy = connection.execute(query)
+        ResultSet = ResultProxy.fetchone()
+        if(not ResultSet):
+            return "Unable to Update"
+        print(str(ResultSet))
+        # Update the URL
+
+        query = (
+            update(User).
+            where(User.columns.id == id).
+            values(req_data)
+        )
+        ResultProxy = connection.execute(query)
+        ResultSet = ResultProxy.fetchall()
+        if(not ResultSet):
+            return "Unable to Update"
+        return str(ResultSet)
+
     return str(req_data)
+
 
 @client.route('/', methods=["PUT"])
 def addOne():
@@ -100,12 +115,19 @@ def addOne():
     """
     # read data from the API call
     req_data = request.get_json()
-    print(req_data)
-    # if all info filled, Create new user
-    # query = select([User]).where(User.columns.id == id)
-    # ResultProxy = connection.execute(query)
-    # ResultSet = ResultProxy.fetchone()
-    # if(not ResultSet):
-    #     return "empty set"
-    # return str(ResultSet)
-    return str(req_data)
+
+    if('name' in req_data and 'email' in req_data and 'pwd' in req_data and 'user_type' in req_data):
+        # check for User_type
+
+        query = (
+            insert(User).
+            values(name=req_data['name'], email=req_data['email'],
+                   password=req_data['pwd'], user_type=req_data['user_type'])
+        )
+        ResultProxy = connection.execute(query)
+        ResultSet = ResultProxy.fetchaall()
+        if(not ResultSet):
+            return "empty set"
+        return str(ResultSet)
+
+    return ("Cannot add new value")
