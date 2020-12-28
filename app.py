@@ -2,25 +2,31 @@ from flask import Flask
 from flask import Flask, flash, redirect, render_template, request, session, abort, get_flashed_messages, jsonify, Blueprint
 import os
 from dotenv import load_dotenv
-
+from controllers.client import client
 from sqlalchemy import create_engine, MetaData, Table, Column, select, insert, and_, update
+
+from db.database import Client,User,connection
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)
 
-
-engine = create_engine(os.getenv('SQLALCHEMY_DATABASE_URI'))
-connection = engine.connect()
-metadata = MetaData()
-Client = Table('client', metadata,
-                  autoload=True, autoload_with=engine,extend_existing=True)
-User = Table('user', metadata,
-                  autoload=True, autoload_with=engine,extend_existing=True)
+app.register_blueprint(client, url_prefix='/client/')
 
 
 @app.route('/')
 def home(result=None):
+    """[summary]
+    Homepage - Redirect to Login
+
+    Args:
+        result to redirect to the dashboard
+        result ([type], optional): [description]. Defaults to None.
+
+    Returns:
+        render_template
+        [type]: [description]
+    """
     print(not session.get('logged_in') and not result)
     if not session.get('logged_in') and not result:
         return render_template('login.html')
@@ -31,13 +37,27 @@ def home(result=None):
     
 @app.route('/test')
 def test(done = None):
+    """[summary]
+    testing function to check render_template
+    Args:
+        done ([type], optional): [description]. Defaults to None.
+
+    Returns:
+        [type]: [description]
+    """
     if(done):
         flash('New Entry Done!')
     return render_template('webpage/index1.html')
 
 @app.route('/login', methods=['POST'])
-def do_admin_login():
-    # query to check if Email & Pwd match
+def do_login_login():
+    """[summary]
+    query to check if Email & Pwd match
+
+    Returns:
+    function call to dashboard
+        [type]: [description]
+    """
 
     query = select([User]).where(and_(User.columns.email == request.form['email'],User.columns.password==request.form['password'] ))
     ResultProxy = connection.execute(query)
@@ -55,11 +75,24 @@ def do_admin_login():
 
 @app.route("/logout")
 def logout():
+    """[summary]
+    logout functionality
+    Returns:
+        home() ==> Login page
+        [type]: [description]
+    """
     session['logged_in'] = False
     return home()
 
 @app.route('/foo', methods=['POST']) 
 def foo():
+    """[summary]
+    testing for reading data from a form
+
+    Returns:
+    function call to test page
+        [type]: [description]
+    """
     print(request.form)
     data = request.form.to_dict()
     print(data)
