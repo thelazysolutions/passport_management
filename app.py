@@ -2,7 +2,7 @@ from flask import Flask
 from flask import Flask, flash, redirect, render_template, request, session, abort, get_flashed_messages, jsonify, Blueprint
 import os
 from dotenv import load_dotenv
-from controllers.client import client
+from controllers.users import user
 from sqlalchemy import create_engine, MetaData, Table, Column, select, insert, and_, update
 
 from db.database import Client,User,connection
@@ -11,7 +11,7 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.urandom(12)
 
-app.register_blueprint(client, url_prefix='/client/')
+app.register_blueprint(user, url_prefix='/user/')
 
 
 @app.route('/')
