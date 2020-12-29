@@ -1,7 +1,15 @@
 from flask import Flask, Blueprint, request
-from db.database import Client, User, connection, select, delete, insert, update
+from db.database import Client, User, connection, select, delete, insert, update, metadata
 
 client = Blueprint('client', __name__, template_folder='templates')
+
+@client.route('/test/', methods=["GET", "POST"])
+def viewTableAll():
+    a = []
+    for c in Client.c:
+        print(c)
+        a.append(str(c))
+    return str(a)
 
 
 @client.route('/', methods=["GET", "POST"])
@@ -13,7 +21,7 @@ def viewAll():
         client data in a String (Do in JSON)
         [type]: [description]
     """
-    query = select([User])
+    query = select([Client])
     ResultProxy = connection.execute(query)
     ResultSet = ResultProxy.fetchall()
     return str(ResultSet)
@@ -30,7 +38,7 @@ def viewOne(id):
         Empty string Message
         [type]: [description]
     """
-    query = select([User]).where(User.columns.id == id)
+    query = select([Client]).where(Client.columns.id == id)
     ResultProxy = connection.execute(query)
     ResultSet = ResultProxy.fetchone()
     if(not ResultSet):
@@ -49,9 +57,8 @@ def deleteOne(id):
         Empty ID Message
         [type]: [description]
     """
-    query = User.delete().where(User.columns.id == id)
+    query = Client.delete().where(Client.columns.id == id)
     ResultProxy = connection.execute(query)
-    print(ResultProxy)
     ResultSet = ResultProxy.fetchall()
     if(not ResultSet):
         return "Couldn't find entry to Delete"

@@ -3,6 +3,7 @@ from flask import Flask, flash, redirect, render_template, request, session, abo
 import os
 from dotenv import load_dotenv
 from controllers.users import user
+from controllers.clients import client
 from sqlalchemy import create_engine, MetaData, Table, Column, select, insert, and_, update
 
 from db.database import Client,User,connection
@@ -12,7 +13,7 @@ app = Flask(__name__)
 app.secret_key = os.urandom(12)
 
 app.register_blueprint(user, url_prefix='/user/')
-
+app.register_blueprint(client, url_prefix='/client/')
 
 @app.route('/')
 def home(result=None):
