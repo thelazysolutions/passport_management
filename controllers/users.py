@@ -92,7 +92,6 @@ def updateOne(id):
     """
     # read data from the API call
     req_data = request.get_json()
-    print(req_data)
 
     query = select([User]).where(User.columns.id == id)
     ResultProxy = connection.execute(query)
@@ -101,13 +100,6 @@ def updateOne(id):
         return {'error':'Unable to find the given user'}
 
     if('name' in req_data or 'email' in req_data or 'pwd' in req_data or 'user_type' in req_data):
-        query = select([User]).where(User.columns.id == id)
-        ResultProxy = connection.execute(query)
-        ResultSet = ResultProxy.fetchone()
-        if(not ResultSet):
-            return {'error':'Unable to Update the given user'} 
-        print(str(ResultSet))
-        # Update the URL
 
         query = (
             update(User).

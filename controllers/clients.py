@@ -1,13 +1,32 @@
 from flask import Flask, Blueprint, request
-from db.database import Client, User, connection, select, delete, insert, update, metadata
+from db.database import Client, connection, select, delete, insert, update, metadata
 
 client = Blueprint('client', __name__, template_folder='templates')
+
+
+def list_to_json(list):
+    """[summary]
+    Appends the Column headers as Keys
+    and returns a JSON with the values
+
+    Args:
+        list ([type]): [description]
+
+    Returns:
+        JSON
+        [type]: [description]
+    """
+    op = []
+    for (a, b) in zip((Client.c.keys()), list):
+        # print(a,b)
+        op.append({a: str(b).replace('client.', '')})
+    return op
+
 
 @client.route('/test/', methods=["GET", "POST"])
 def viewTableAll():
     a = []
     for c in Client.c:
-        print(c)
         a.append(str(c))
     return str(a)
 
@@ -24,7 +43,10 @@ def viewAll():
     query = select([Client])
     ResultProxy = connection.execute(query)
     ResultSet = ResultProxy.fetchall()
-    return str(ResultSet)
+    res = []
+    for rs in ResultSet:
+        res.append(list_to_json(rs))
+    return dict(enumerate(res))
 
 
 @client.route('/<id>', methods=["GET", "POST"])
@@ -42,8 +64,8 @@ def viewOne(id):
     ResultProxy = connection.execute(query)
     ResultSet = ResultProxy.fetchone()
     if(not ResultSet):
-        return "empty set"
-    return str(ResultSet)
+        return {'error': 'Unable to find the given client'}
+    return list_to_json(ResultSet)
 
 
 @client.route('/<id>', methods=["DELETE"])
@@ -61,8 +83,8 @@ def deleteOne(id):
     ResultProxy = connection.execute(query)
     ResultSet = ResultProxy.fetchall()
     if(not ResultSet):
-        return "Couldn't find entry to Delete"
-    return "Delete Succesful"
+        return {'error': 'Unable to find the given client'}
+    return {'status': "Delete Succesful"}
 
 
 @client.route('/<id>', methods=["PUT"])
@@ -78,35 +100,25 @@ def updateOne(id):
     """
     # read data from the API call
     req_data = request.get_json()
-    print(req_data)
 
-    query = select([User]).where(User.columns.id == id)
+    query = select([Client]).where(Client.columns.id == id)
     ResultProxy = connection.execute(query)
     ResultSet = ResultProxy.fetchone()
     if(not ResultSet):
-        return "empty set"
+        return {'error': 'Unable to Find the given client'}
 
-    if('name' in req_data or 'email' in req_data or 'pwd' in req_data or 'user_type' in req_data):
-        query = select([User]).where(User.columns.id == id)
-        ResultProxy = connection.execute(query)
-        ResultSet = ResultProxy.fetchone()
-        if(not ResultSet):
-            return "Unable to Update"
-        print(str(ResultSet))
-        # Update the URL
+    # Update the URL
 
-        query = (
-            update(User).
-            where(User.columns.id == id).
-            values(req_data)
-        )
-        ResultProxy = connection.execute(query)
-        ResultSet = ResultProxy.fetchall()
-        if(not ResultSet):
-            return "Unable to Update"
-        return str(ResultSet)
-
-    return str(req_data)
+    query = (
+        update(Client).
+        where(Client.columns.id == id).
+        values(req_data)
+    )
+    ResultProxy = connection.execute(query)
+    ResultSet = ResultProxy.fetchall()
+    if(not ResultSet):
+        return {'error': 'Unable to Update the given client'}
+    return {'status': "Update Succesful"}
 
 
 @client.route('/', methods=["PUT"])
@@ -123,18 +135,13 @@ def addOne():
     # read data from the API call
     req_data = request.get_json()
 
-    if('name' in req_data and 'email' in req_data and 'pwd' in req_data and 'user_type' in req_data):
-        # check for User_type
-
-        query = (
-            insert(User).
-            values(name=req_data['name'], email=req_data['email'],
-                   password=req_data['pwd'], user_type=req_data['user_type'])
-        )
-        ResultProxy = connection.execute(query)
-        ResultSet = ResultProxy.fetchaall()
-        if(not ResultSet):
-            return "empty set"
-        return str(ResultSet)
-
-    return ("Cannot add new value")
+    query = (
+        insert(Client).
+        values(name=req_data['name'], email=req_data['email'],
+               password=req_data['pwd'], client_type=req_data['client_type'])
+    )
+    ResultProxy = connection.execute(query)
+    ResultSet = ResultProxy.fetchaall()
+    if(not ResultSet):
+        return {'error': 'Unable to Add the given client'}
+    return {'status': "Adding Succesful"}
