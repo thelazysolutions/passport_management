@@ -15,10 +15,9 @@ def list_to_json(list):
         JSON
         [type]: [description]
     """
-    op = []
+    op = {}
     for (a, b) in zip((User.c.keys()),list):
-        # print(a,b) 
-        op.append({a:str(b).replace('user.','')})
+        op[a] = str(b).replace('user.','')
     return op
 
 
@@ -99,12 +98,18 @@ def updateOne(id):
     if(not ResultSet):
         return {'error':'Unable to find the given user'}
 
-    if('name' in req_data or 'email' in req_data or 'pwd' in req_data or 'user_type' in req_data):
+    json_data = {}
+
+    for req in req_data:
+        if (req in User.c.keys()):
+            json_data[req] = req_data[req]
+
+    if(json_data != {}):
 
         query = (
             update(User).
             where(User.columns.id == id).
-            values(req_data)
+            values(json_data)
         )
         ResultProxy = connection.execute(query)
         if(not ResultProxy):
@@ -128,13 +133,12 @@ def addOne():
     # read data from the API call
     req_data = request.get_json()
 
-    if('name' in req_data and 'email' in req_data and 'pwd' in req_data and 'user_type' in req_data):
+    if('name' in req_data and 'email' in req_data and 'password' in req_data and 'user_type' in req_data):
         # check for User_type
-
+        
         query = (
             insert(User).
-            values(name=req_data['name'], email=req_data['email'],
-                   password=req_data['pwd'], user_type=req_data['user_type'])
+            values(req_data)
         )
         ResultProxy = connection.execute(query)
         if(not ResultProxy):

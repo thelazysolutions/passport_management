@@ -16,10 +16,9 @@ def list_to_json(list):
         JSON
         [type]: [description]
     """
-    op = []
+    op = {}
     for (a, b) in zip((Client.c.keys()), list):
-        # print(a,b)
-        op.append({a: str(b).replace('client.', '')})
+         op[a] = str(b).replace('client.', '')
     return op
 
 
@@ -108,11 +107,16 @@ def updateOne(id):
         return {'error': 'Unable to Find the given client'}
 
     # Update the URL
+    json_data = {}
+
+    for req in req_data:
+        if (req in Client.c.keys()):
+            json_data[req] = req_data[req]
 
     query = (
         update(Client).
         where(Client.columns.id == id).
-        values(req_data)
+        values(json_data)
     )
     ResultProxy = connection.execute(query)
     ResultSet = ResultProxy.fetchall()
