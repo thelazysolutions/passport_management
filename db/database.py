@@ -10,3 +10,5 @@ Client = Table('client', metadata,
                   autoload=True, autoload_with=engine,extend_existing=True)
 User = Table('user', metadata,
                   autoload=True, autoload_with=engine,extend_existing=True)
+Document = Table('document', metadata,
+                  autoload=True, autoload_with=engine,extend_existing=True)

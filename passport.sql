@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 23, 2020 at 01:22 PM
+-- Generation Time: Dec 30, 2020 at 03:06 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.4.13
 
@@ -49,7 +49,47 @@ CREATE TABLE `client` (
   `search_location` varchar(30) NOT NULL,
   `search_taluka` varchar(30) NOT NULL,
   `wa_group` tinyint(1) NOT NULL,
-  `wa_group_name` varchar(30) NOT NULL
+  `wa_group_name` varchar(30) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `document`
+--
+
+DROP TABLE IF EXISTS `document`;
+CREATE TABLE `document` (
+  `id` int(11) NOT NULL,
+  `client_id` int(11) NOT NULL,
+  `registration` text NOT NULL,
+  `to_register` text NOT NULL,
+  `document` text NOT NULL,
+  `document_of` text NOT NULL,
+  `name` text NOT NULL,
+  `place` text NOT NULL,
+  `date` datetime NOT NULL,
+  `registered_date` datetime NOT NULL,
+  `doc_available` text NOT NULL,
+  `doc_in_office` text NOT NULL,
+  `sac_date` datetime NOT NULL,
+  `attested` int(11) NOT NULL,
+  `a/t_date` datetime NOT NULL,
+  `translation_date` datetime NOT NULL,
+  `notary_date` datetime NOT NULL,
+  `collector_date` datetime NOT NULL,
+  `apostle_date` datetime NOT NULL,
+  `send_to_pt_date` datetime NOT NULL,
+  `doc_reached_pt` datetime NOT NULL,
+  `received_in_pt_date` datetime NOT NULL,
+  `submitted_date` datetime NOT NULL,
+  `concluded_date` datetime NOT NULL,
+  `submitted` text NOT NULL,
+  `attachment` text NOT NULL,
+  `comment` text NOT NULL,
+  `billable` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -64,7 +104,9 @@ CREATE TABLE `user` (
   `name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
-  `user_type` int(11) NOT NULL DEFAULT 1
+  `user_type` int(11) NOT NULL DEFAULT 1,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -75,6 +117,12 @@ CREATE TABLE `user` (
 -- Indexes for table `client`
 --
 ALTER TABLE `client`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `document`
+--
+ALTER TABLE `document`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -91,6 +139,12 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `client`
 --
 ALTER TABLE `client`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `document`
+--
+ALTER TABLE `document`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
