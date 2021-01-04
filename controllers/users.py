@@ -1,5 +1,5 @@
 from flask import Flask, Blueprint, request
-from db.database import Client, User, connection, select, delete, insert, update
+from db.database import Client, User, connection, select, delete, insert, update, and_
 
 user = Blueprint('User', __name__, template_folder='templates')
 
@@ -19,6 +19,32 @@ def list_to_json(list):
     for (a, b) in zip((User.c.keys()),list):
         op[a] = str(b).replace('user.','')
     return op
+
+
+@user.route('/login', methods=['POST'])
+def do_login():
+    """[summary]
+    User Login API
+    query to check if Email & Pwd match
+
+    Returns:
+    function call to dashboard
+        [type]: [description]
+    """
+    req_data = request.get_json()
+
+    if('email' in req_data and 'password' in req_data):
+        # check for User_type
+        
+        query = select([User]).where(and_(User.columns.email == req_data['email'] , User.columns.password == req_data['password']))
+        ResultProxy = connection.execute(query)
+        ResultSet = ResultProxy.fetchone()
+        if(not ResultSet):
+            return {'error':'Unable to find the user for Login'}
+        
+        return {'success': ' User logs in', 'user_id': list_to_json(ResultSet)}
+
+    return {'error':'Cannot Login'} 
 
 
 @user.route('/', methods=["GET", "POST"])
@@ -71,7 +97,6 @@ def deleteOne(id):
     """
     query = User.delete().where(User.columns.id == id)
     ResultProxy = connection.execute(query)
-    print(ResultProxy)
     ResultSet = ResultProxy.fetchall()
     if(not ResultSet):
         return {'error':'Unable to find the given user'}

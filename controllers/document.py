@@ -22,6 +22,13 @@ def list_to_json(list):
     return op
 
 
+@document.route('/test', methods=["GET", "POST"])
+def test():
+    obj = {}
+    for key in Document.c.keys():
+        obj[key] = '1'
+    return obj
+
 @document.route('/', methods=["GET", "POST"])
 def viewAll():
     """[summary]
@@ -72,7 +79,6 @@ def deleteOne(id):
     """
     query = Document.delete().where(Document.columns.id == id)
     ResultProxy = connection.execute(query)
-    print(ResultProxy)
     ResultSet = ResultProxy.fetchall()
     if(not ResultSet):
         return {'error': 'Unable to find the given document'}
@@ -133,17 +139,23 @@ def addOne():
     """
     # read data from the API call
     req_data = request.get_json()
+    # check for Document_type
 
-    if('name' in req_data and 'email' in req_data and 'password' in req_data and 'document_type' in req_data):
-        # check for Document_type
+    json_data = {}
+
+    for req in req_data:
+        if (req in Document.c.keys()):
+            json_data[req] = req_data[req]
+
+    if(json_data != {}):
 
         query = (
             insert(Document).
-            values(req_data)
+            values(json_data)
         )
         ResultProxy = connection.execute(query)
         if(not ResultProxy):
             return {'error': 'Unable to Add the given document'}
         return {'status': "Adding Succesful"}
+    return {'error': 'Unable to Add the given document'}
 
-    return {'error': 'Cannot add new value'}
