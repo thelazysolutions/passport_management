@@ -1,7 +1,18 @@
+from dotenv import load_dotenv
 from flask import Flask, Blueprint, request
 from db.database import Client, User, Document, connection, select, delete, insert, update
-
+from werkzeug.utils import secure_filename
+import os
+import boto3
+import botocore
 document = Blueprint('Document', __name__, template_folder='templates')
+load_dotenv()
+
+s3 = boto3.client(
+    "s3",
+    aws_access_key_id=os.getenv('AWSAccessKeyId'),
+    aws_secret_access_key=os.getenv('AWSSecretKey')
+)
 
 
 def list_to_json(list):
@@ -28,6 +39,7 @@ def test():
     for key in Document.c.keys():
         obj[key] = '1'
     return obj
+
 
 @document.route('/', methods=["GET", "POST"])
 def viewAll():
@@ -159,3 +171,76 @@ def addOne():
         return {'status': "Adding Succesful"}
     return {'error': 'Unable to Add the given document'}
 
+
+@document.route('/file', methods=["POST"])
+def addFile():
+    """[summary]
+    Upload a Document in S3 and return the URL for the S3
+
+    Returns:
+        document data in a String (Do in JSON)
+        OR 
+        Empty string Message
+        [type]: [description]
+    """
+
+    try:
+        f = request.files['file']
+        filename = secure_filename(f.filename)
+        f.save(os.path.join('files', filename))
+        f.seek(0)
+        output = upload_file_to_s3(f, os.getenv('AWS_bucket_id'))
+        try:
+            os.remove(os.path.join('files', filename))
+        except OSError:
+            pass
+        return {'url': str(output)}
+
+    except:
+        return {'error': 'Unable to Upload the given document'}
+
+
+@document.route('/file1', methods=["GET,POST"])
+def getFile():
+    """[summary]
+    Download a Document from S3 and return the URL in Local
+
+    Returns:
+        document data in a String (Do in JSON)
+        OR 
+        Empty string Message
+        [type]: [description]
+    """
+    # read data from the API call
+
+    # Read S3 URL,
+
+    # Clear the Download Folder
+
+    # Download the file to folder
+
+    # return the Link to the Downloaded file
+
+    #  CURRENTLY DOWNLOADING USING LINK DIRECTLY
+
+    return {'error': 'Unable to Download the given document'}
+
+
+def upload_file_to_s3(file, bucket_name, acl="public-read"):
+    """
+    Docs: http://boto3.readthedocs.io/en/latest/guide/s3.html
+    """
+    try:
+        s3.upload_fileobj(
+            file,
+            bucket_name,
+            file.filename,
+            ExtraArgs={
+                "ACL": acl,
+                "ContentType": file.content_type  # Set appropriate content type as per the file
+            }
+        )
+    except Exception as e:
+        print("Something Happened: ", e)
+        return e
+    return "{}{}".format("https://"+os.getenv('AWS_bucket_id')+".s3.amazonaws.com/", file.filename)
