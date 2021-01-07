@@ -12,3 +12,7 @@ User = Table('user', metadata,
                   autoload=True, autoload_with=engine,extend_existing=True)
 Document = Table('document', metadata,
                   autoload=True, autoload_with=engine,extend_existing=True)
+Reminder = Table('reminder', metadata,
+                  autoload=True, autoload_with=engine,extend_existing=True)
+Followup = Table('followup', metadata,
+                  autoload=True, autoload_with=engine,extend_existing=True)                  

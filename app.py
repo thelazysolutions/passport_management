@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 from controllers.users import user
 from controllers.clients import client
 from controllers.document import document
+from controllers.reminder import reminder
+from controllers.followup import followup
 from sqlalchemy import create_engine, MetaData, Table, Column, select, insert, and_, update
 
 from db.database import Client,User,connection
@@ -16,6 +18,8 @@ app.secret_key = os.urandom(12)
 app.register_blueprint(user, url_prefix='/user/')
 app.register_blueprint(client, url_prefix='/client/')
 app.register_blueprint(document, url_prefix='/document/')
+app.register_blueprint(reminder, url_prefix='/reminder/')
+app.register_blueprint(followup, url_prefix='/followup/')
 
 @app.route('/')
 def home(result=None):
