@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import Flask, flash, redirect, render_template, request, session, abort, get_flashed_messages, jsonify, Blueprint
+from flask_cors import CORS, cross_origin
 import os
 from dotenv import load_dotenv
 from controllers.users import user
@@ -14,7 +15,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)
-
+cors = CORS(app)
 app.register_blueprint(user, url_prefix='/user/')
 app.register_blueprint(client, url_prefix='/client/')
 app.register_blueprint(document, url_prefix='/document/')
