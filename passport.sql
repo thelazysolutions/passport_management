@@ -3,13 +3,13 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 30, 2020 at 03:06 PM
+-- Generation Time: Jan 08, 2021 at 12:40 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.4.13
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "+05:30";
+SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -38,7 +38,7 @@ CREATE TABLE `client` (
   `email` varchar(100) NOT NULL,
   `email_alt` varchar(100) DEFAULT NULL,
   `location` varchar(50) NOT NULL,
-  `first_contact_date` date NOT NULL,
+  `first_contact_date` datetime NOT NULL,
   `source` varchar(20) NOT NULL,
   `referred_by` varchar(30) NOT NULL,
   `process_type` varchar(20) NOT NULL,
@@ -70,12 +70,11 @@ CREATE TABLE `document` (
   `document_of` text NOT NULL,
   `name` text NOT NULL,
   `place` text NOT NULL,
-  `date` datetime NOT NULL,
-  `registered_date` datetime NOT NULL,
+  `date` datetime NOT NULL DEFAULT current_timestamp(),
+  `registered_date` datetime NOT NULL DEFAULT current_timestamp(),
   `doc_available` text NOT NULL,
   `doc_in_office` text NOT NULL,
   `sac_date` datetime NOT NULL,
-  `attested` int(11) NOT NULL,
   `a/t_date` datetime NOT NULL,
   `translation_date` datetime NOT NULL,
   `notary_date` datetime NOT NULL,
@@ -89,7 +88,44 @@ CREATE TABLE `document` (
   `submitted` text NOT NULL,
   `attachment` text NOT NULL,
   `comment` text NOT NULL,
-  `billable` text NOT NULL
+  `billable` text NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `followup`
+--
+
+DROP TABLE IF EXISTS `followup`;
+CREATE TABLE `followup` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `followup_for` text NOT NULL,
+  `type` text NOT NULL,
+  `date` datetime NOT NULL,
+  `comments` text NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reminder`
+--
+
+DROP TABLE IF EXISTS `reminder`;
+CREATE TABLE `reminder` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `remind` text NOT NULL,
+  `current_case_stage` text NOT NULL,
+  `closed_by` text NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -126,6 +162,18 @@ ALTER TABLE `document`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `followup`
+--
+ALTER TABLE `followup`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `reminder`
+--
+ALTER TABLE `reminder`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -145,6 +193,18 @@ ALTER TABLE `client`
 -- AUTO_INCREMENT for table `document`
 --
 ALTER TABLE `document`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `followup`
+--
+ALTER TABLE `followup`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `reminder`
+--
+ALTER TABLE `reminder`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --

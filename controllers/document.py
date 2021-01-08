@@ -44,6 +44,7 @@ def test():
 @document.route('/', methods=["GET", "POST"])
 def viewAll():
     """[summary]
+    TESTED - FOUND OK
     View all the document Data
 
     Returns:
@@ -62,6 +63,7 @@ def viewAll():
 @document.route('/<id>', methods=["GET", "POST"])
 def viewOne(id):
     """[summary]
+    TESTED - FOUND OK
     View the document's Data with a specific id
 
     Returns:
@@ -81,6 +83,7 @@ def viewOne(id):
 @document.route('/<id>', methods=["DELETE"])
 def deleteOne(id):
     """[summary]
+    TESTED - FOUND OK
     Delete the document's Data with a specific id
 
     Returns:
@@ -91,8 +94,7 @@ def deleteOne(id):
     """
     query = Document.delete().where(Document.columns.id == id)
     ResultProxy = connection.execute(query)
-    ResultSet = ResultProxy.fetchall()
-    if(not ResultSet):
+    if(not ResultProxy):
         return {'error': 'Unable to find the given document'}
     return {'status': "Delete Succesful"}
 
@@ -100,6 +102,7 @@ def deleteOne(id):
 @document.route('/<id>', methods=["PUT"])
 def updateOne(id):
     """[summary]
+    TESTED - FOUND OK
     Update the document's Data with a specific id
 
     Returns:
@@ -141,6 +144,7 @@ def updateOne(id):
 @document.route('/', methods=["PUT"])
 def addOne():
     """[summary]
+    TESTED - FOUND OK
     Add the document's Data to an entry
 
     Returns:
@@ -175,6 +179,7 @@ def addOne():
 @document.route('/file', methods=["POST"])
 def addFile():
     """[summary]
+    TESTED - FOUND OK
     Upload a Document in S3 and return the URL for the S3
 
     Returns:

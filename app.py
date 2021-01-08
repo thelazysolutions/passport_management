@@ -55,11 +55,13 @@ def test(done = None):
         flash('New Entry Done!')
     return render_template('webpage/index1.html')
 
+
 @app.route('/login', methods=['POST'])
 def do_login_login():
     """[summary]
     query to check if Email & Pwd match
-
+    Testing for demo frontend
+    DO NOT USE
     Returns:
     function call to dashboard
         [type]: [description]

@@ -18,21 +18,22 @@ def list_to_json(list):
     """
     op = {}
     for (a, b) in zip((Client.c.keys()), list):
-         op[a] = str(b).replace('client.', '')
+        op[a] = str(b).replace('client.', '')
     return op
 
 
 @client.route('/test/', methods=["GET", "POST"])
 def viewTableAll():
-    a = []
-    for c in Client.c:
-        a.append(str(c))
-    return str(a)
+    obj = {}
+    for key in Client.c.keys():
+        obj[key] = '1'
+    return obj
 
 
 @client.route('/', methods=["GET", "POST"])
 def viewAll():
     """[summary]
+    TESTED - FOUND OK
     View all the Clients Data
 
     Returns:
@@ -51,6 +52,7 @@ def viewAll():
 @client.route('/<id>', methods=["GET", "POST"])
 def viewOne(id):
     """[summary]
+    TESTED - FOUND OK
     View the Client's Data with a specific id
 
     Returns:
@@ -70,6 +72,7 @@ def viewOne(id):
 @client.route('/<id>', methods=["DELETE"])
 def deleteOne(id):
     """[summary]
+    TESTED - FOUND OK
     Delete the Client's Data with a specific id
 
     Returns:
@@ -80,8 +83,7 @@ def deleteOne(id):
     """
     query = Client.delete().where(Client.columns.id == id)
     ResultProxy = connection.execute(query)
-    ResultSet = ResultProxy.fetchall()
-    if(not ResultSet):
+    if(not ResultProxy):
         return {'error': 'Unable to find the given client'}
     return {'status': "Delete Succesful"}
 
@@ -89,6 +91,7 @@ def deleteOne(id):
 @client.route('/<id>', methods=["PUT"])
 def updateOne(id):
     """[summary]
+    TESTED - FOUND OK
     Update the Client's Data with a specific id
 
     Returns:
@@ -119,8 +122,7 @@ def updateOne(id):
         values(json_data)
     )
     ResultProxy = connection.execute(query)
-    ResultSet = ResultProxy.fetchall()
-    if(not ResultSet):
+    if(not ResultProxy):
         return {'error': 'Unable to Update the given client'}
     return {'status': "Update Succesful"}
 
@@ -128,6 +130,7 @@ def updateOne(id):
 @client.route('/', methods=["PUT"])
 def addOne():
     """[summary]
+    TESTED - FOUND OK
     Add the Client's Data to an entry
 
     Returns:
@@ -138,14 +141,17 @@ def addOne():
     """
     # read data from the API call
     req_data = request.get_json()
+    json_data = {}
+
+    for req in req_data:
+        if (req in Client.c.keys()):
+            json_data[req] = req_data[req]
 
     query = (
         insert(Client).
-        values(name=req_data['name'], email=req_data['email'],
-               password=req_data['pwd'], client_type=req_data['client_type'])
+        values(json_data)
     )
     ResultProxy = connection.execute(query)
-    ResultSet = ResultProxy.fetchaall()
-    if(not ResultSet):
+    if(not ResultProxy):
         return {'error': 'Unable to Add the given client'}
     return {'status': "Adding Succesful"}

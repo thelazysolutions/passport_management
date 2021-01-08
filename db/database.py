@@ -7,12 +7,12 @@ engine = create_engine(os.getenv('SQLALCHEMY_DATABASE_URI'))
 connection = engine.connect()
 metadata = MetaData()
 Client = Table('client', metadata,
-                  autoload=True, autoload_with=engine,extend_existing=True)
+               autoload=True, autoload_with=engine, extend_existing=True)
 User = Table('user', metadata,
-                  autoload=True, autoload_with=engine,extend_existing=True)
+             autoload=True, autoload_with=engine, extend_existing=True)
 Document = Table('document', metadata,
-                  autoload=True, autoload_with=engine,extend_existing=True)
+                 autoload=True, autoload_with=engine, extend_existing=True)
 Reminder = Table('reminder', metadata,
-                  autoload=True, autoload_with=engine,extend_existing=True)
+                 autoload=True, autoload_with=engine, extend_existing=True)
 Followup = Table('followup', metadata,
-                  autoload=True, autoload_with=engine,extend_existing=True)                  
+                 autoload=True, autoload_with=engine, extend_existing=True)
