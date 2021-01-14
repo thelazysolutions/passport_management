@@ -108,4 +108,4 @@ def foo():
     return test('done')
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host=os.getenv('HOST'), port=os.getenv('PORT'), debug=True)

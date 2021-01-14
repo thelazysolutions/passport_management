@@ -1,0 +1,6 @@
+SQLALCHEMY_DATABASE_URI = mysql://username:@password/passport?host=localhost?port=3306
+AWSAccessKeyId = AWS access Key
+AWSSecretKey = AWS Secret Key
+AWS_bucket_id = bucket ID 
+HOST = host used for the site (Local: localhost, on server: 0.0.0.0 )
+PORT = Port used for App
