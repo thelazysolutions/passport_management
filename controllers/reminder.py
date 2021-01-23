@@ -138,14 +138,18 @@ def addOne():
     """
     # read data from the API call
     req_data = request.get_json()
+    json_data = {}
+
+    for req in req_data:
+        if (req in Reminder .c.keys()):
+            json_data[req] = req_data[req]
 
     query = (
         insert(Reminder).
-        values(name=req_data['name'], email=req_data['email'],
-               password=req_data['pwd'], client_type=req_data['client_type'])
+        values(json_data)
     )
+
     ResultProxy = connection.execute(query)
-    ResultSet = ResultProxy.fetchaall()
-    if(not ResultSet):
+    if(not ResultProxy):
         return {'error': 'Unable to Add the given client'}
     return {'status': "Adding Succesful"}

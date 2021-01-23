@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 08, 2021 at 12:40 PM
+-- Generation Time: Jan 23, 2021 at 11:06 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.4.13
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `passport`
 --
-CREATE DATABASE IF NOT EXISTS `passport` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `passport`;
 
 -- --------------------------------------------------------
 
@@ -70,21 +68,23 @@ CREATE TABLE `document` (
   `document_of` text NOT NULL,
   `name` text NOT NULL,
   `place` text NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp(),
-  `registered_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `date` date NOT NULL DEFAULT current_timestamp(),
+  `registered_date` date NOT NULL DEFAULT current_timestamp(),
   `doc_available` text NOT NULL,
   `doc_in_office` text NOT NULL,
-  `sac_date` datetime NOT NULL,
-  `a/t_date` datetime NOT NULL,
-  `translation_date` datetime NOT NULL,
-  `notary_date` datetime NOT NULL,
-  `collector_date` datetime NOT NULL,
-  `apostle_date` datetime NOT NULL,
-  `send_to_pt_date` datetime NOT NULL,
-  `doc_reached_pt` datetime NOT NULL,
-  `received_in_pt_date` datetime NOT NULL,
-  `submitted_date` datetime NOT NULL,
-  `concluded_date` datetime NOT NULL,
+  `sac_date` date NOT NULL,
+  `a/t_date` date NOT NULL,
+  `translation_date` date NOT NULL,
+  `notary_date` date NOT NULL,
+  `collector_date` date NOT NULL,
+  `apostle_date` date NOT NULL,
+  `send_to_pt_date` date NOT NULL,
+  `doc_reached_pt` text NOT NULL,
+  `received_in_pt_date` date NOT NULL,
+  `submitted_date` date NOT NULL,
+  `concluded_date` date NOT NULL,
+  `doc_issue_date` date NOT NULL DEFAULT current_timestamp(),
+  `reg_bill` text NOT NULL,
   `submitted` text NOT NULL,
   `attachment` text NOT NULL,
   `comment` text NOT NULL,
@@ -105,7 +105,7 @@ CREATE TABLE `followup` (
   `user_id` int(11) NOT NULL,
   `followup_for` text NOT NULL,
   `type` text NOT NULL,
-  `date` datetime NOT NULL,
+  `date` date NOT NULL,
   `comments` text NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
@@ -144,6 +144,18 @@ CREATE TABLE `user` (
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id`, `name`, `email`, `password`, `user_type`, `created_at`, `updated_at`) VALUES
+(9, '11Testing User', 'sass@test.com', 'Pass:1234', 1, '2020-12-29 18:46:46', '2020-12-29 18:48:18'),
+(10, 'New Employee', 'emp@emp.com', 'emp', 1, '2020-12-29 18:46:46', '2020-12-29 18:46:46'),
+(12, 'sasda', 'asddfs', 'sdffsd', 1, '2020-12-29 18:46:46', '2020-12-29 18:46:46'),
+(13, 'From the API', 'No email', 'add pwd', 2, '2020-12-29 18:46:46', '2020-12-29 18:46:46'),
+(14, 'From the API', 'No email', 'add pwd', 2, '2020-12-29 18:46:46', '2020-12-29 18:46:46'),
+(15, 'UasdI', 'dsa', 'fs sfd', 1, '2020-12-29 18:46:46', '2020-12-29 18:46:46');
 
 --
 -- Indexes for dumped tables
@@ -211,7 +223,7 @@ ALTER TABLE `reminder`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
