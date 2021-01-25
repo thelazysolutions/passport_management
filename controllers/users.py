@@ -38,7 +38,7 @@ def do_login():
     if('name' in req_data and 'password' in req_data):
         # check for User_type
 
-        query = select([User]).where(and_(User.columns.email ==
+        query = select([User]).where(and_(User.columns.name ==
                                           req_data['name'], User.columns.password == req_data['password']))
         ResultProxy = connection.execute(query)
         ResultSet = ResultProxy.fetchone()
