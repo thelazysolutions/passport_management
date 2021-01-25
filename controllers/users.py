@@ -35,11 +35,11 @@ def do_login():
     """
     req_data = request.get_json()
 
-    if('email' in req_data and 'password' in req_data):
+    if('name' in req_data and 'password' in req_data):
         # check for User_type
 
         query = select([User]).where(and_(User.columns.email ==
-                                          req_data['email'], User.columns.password == req_data['password']))
+                                          req_data['name'], User.columns.password == req_data['password']))
         ResultProxy = connection.execute(query)
         ResultSet = ResultProxy.fetchone()
         if(not ResultSet):
