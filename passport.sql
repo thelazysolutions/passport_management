@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `client` (
   `email` varchar(100) NOT NULL,
   `email_alt` varchar(100) DEFAULT NULL,
   `location` varchar(50) DEFAULT NULL,
-  `first_contact_date` date DEFAULT CURRENT_TIMESTAMP,
+  `first_contact_date` date DEFAULT NULL,
   `source` varchar(20) DEFAULT NULL,
   `referred_by` varchar(30) DEFAULT NULL,
   `process_type` varchar(20) DEFAULT NULL,
