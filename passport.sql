@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `client` (
   `email` varchar(100) NOT NULL,
   `email_alt` varchar(100) DEFAULT NULL,
   `location` varchar(50) DEFAULT NULL,
-  `first_contact_date` date DEFAULT current_timestamp,
+  `first_contact_date` date DEFAULT CURRENT_TIMESTAMP,
   `source` varchar(20) DEFAULT NULL,
   `referred_by` varchar(30) DEFAULT NULL,
   `process_type` varchar(20) DEFAULT NULL,
@@ -49,8 +49,8 @@ CREATE TABLE IF NOT EXISTS `client` (
   `wa_group` varchar(5) DEFAULT NULL,
   `wa_group_name` varchar(30) DEFAULT NULL,
   `address` text DEFAULT NULL,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp,
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
 
@@ -70,8 +70,8 @@ CREATE TABLE IF NOT EXISTS `document` (
   `document_of` text NOT NULL,
   `name` text NOT NULL,
   `place` text NOT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp,
-  `registered_date` date NOT NULL DEFAULT current_timestamp,
+  `date` date NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `registered_date` date NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `doc_available` text NOT NULL,
   `doc_in_office` text NOT NULL,
   `sac_date` date NOT NULL,
@@ -85,14 +85,14 @@ CREATE TABLE IF NOT EXISTS `document` (
   `received_in_pt_date` date NOT NULL,
   `submitted_date` date NOT NULL,
   `concluded_date` date NOT NULL,
-  `doc_issue_date` date NOT NULL DEFAULT current_timestamp,
+  `doc_issue_date` date NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `reg_bill` text NOT NULL,
   `submitted` text NOT NULL,
   `attachment` text NOT NULL,
   `comment` text NOT NULL,
   `billable` text NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp,
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4;
 
@@ -110,8 +110,8 @@ CREATE TABLE IF NOT EXISTS `followup` (
   `type` text NOT NULL,
   `date` date NOT NULL,
   `comments` text NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp,
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4;
 
@@ -128,8 +128,8 @@ CREATE TABLE IF NOT EXISTS `reminder` (
   `remind` text NOT NULL,
   `current_case_stage` text NOT NULL,
   `closed_by` text NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp,
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
 
@@ -146,8 +146,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `email` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
   `user_type` int(11) NOT NULL DEFAULT 1,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp,
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4;
 
