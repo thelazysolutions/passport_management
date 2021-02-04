@@ -3,14 +3,14 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 04, 2021 at 01:58 PM
+-- Generation Time: Feb 04, 2021 at 02:41 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.4.13
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-SET SQL_MODE='ALLOW_INVALID_DATES';
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `client` (
   `email` varchar(100) NOT NULL,
   `email_alt` varchar(100) DEFAULT NULL,
   `location` varchar(50) DEFAULT NULL,
-  `first_contact_date` date DEFAULT NULL,
+  `first_contact_date` date DEFAULT CURRENT_TIMESTAMP,
   `source` varchar(20) DEFAULT NULL,
   `referred_by` varchar(30) DEFAULT NULL,
   `process_type` varchar(20) DEFAULT NULL,
@@ -64,33 +64,33 @@ DROP TABLE IF EXISTS `document`;
 CREATE TABLE IF NOT EXISTS `document` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `client_id` int(11) NOT NULL,
-  `registration` text NOT NULL,
-  `to_register` text NOT NULL,
-  `document` text NOT NULL,
-  `document_of` text NOT NULL,
-  `name` text NOT NULL,
-  `place` text NOT NULL,
-  `date` date NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `registered_date` date NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `doc_available` text NOT NULL,
-  `doc_in_office` text NOT NULL,
-  `sac_date` date NOT NULL,
-  `a/t_date` date NOT NULL,
-  `translation_date` date NOT NULL,
-  `notary_date` date NOT NULL,
-  `collector_date` date NOT NULL,
-  `apostle_date` date NOT NULL,
-  `send_to_pt_date` date NOT NULL,
-  `doc_reached_pt` text NOT NULL,
-  `received_in_pt_date` date NOT NULL,
-  `submitted_date` date NOT NULL,
-  `concluded_date` date NOT NULL,
-  `doc_issue_date` date NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `reg_bill` text NOT NULL,
-  `submitted` text NOT NULL,
-  `attachment` text NOT NULL,
-  `comment` text NOT NULL,
-  `billable` text NOT NULL,
+  `registration` text DEFAULT NULL,
+  `to_register` text DEFAULT NULL,
+  `document` text DEFAULT NULL,
+  `document_of` text DEFAULT NULL,
+  `name` text DEFAULT NULL,
+  `place` text DEFAULT NULL,
+  `date` date DEFAULT CURRENT_TIMESTAMP,
+  `registered_date` date DEFAULT CURRENT_TIMESTAMP,
+  `doc_available` text DEFAULT NULL,
+  `doc_in_office` text DEFAULT NULL,
+  `sac_date` date DEFAULT NULL,
+  `a/t_date` date DEFAULT NULL,
+  `translation_date` date DEFAULT NULL,
+  `notary_date` date DEFAULT NULL,
+  `collector_date` date DEFAULT NULL,
+  `apostle_date` date DEFAULT NULL,
+  `send_to_pt_date` date DEFAULT NULL,
+  `doc_reached_pt` text DEFAULT NULL,
+  `received_in_pt_date` date DEFAULT NULL,
+  `submitted_date` date DEFAULT NULL,
+  `concluded_date` date DEFAULT NULL,
+  `doc_issue_date` date DEFAULT NULL DEFAULT CURRENT_TIMESTAMP,
+  `reg_bill` text DEFAULT NULL,
+  `submitted` text DEFAULT NULL,
+  `attachment` text DEFAULT NULL,
+  `comment` text DEFAULT NULL,
+  `billable` text DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
@@ -106,10 +106,10 @@ DROP TABLE IF EXISTS `followup`;
 CREATE TABLE IF NOT EXISTS `followup` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
-  `followup_for` text NOT NULL,
-  `type` text NOT NULL,
-  `date` date NOT NULL,
-  `comments` text NOT NULL,
+  `followup_for` text DEFAULT NULL,
+  `type` text DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `comments` text DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
@@ -125,9 +125,9 @@ DROP TABLE IF EXISTS `reminder`;
 CREATE TABLE IF NOT EXISTS `reminder` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
-  `remind` text NOT NULL,
-  `current_case_stage` text NOT NULL,
-  `closed_by` text NOT NULL,
+  `remind` text DEFAULT NULL,
+  `current_case_stage` text DEFAULT NULL,
+  `closed_by` text DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
@@ -151,11 +151,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4;
 
---
--- Truncate table before insert `user`
---
-
-TRUNCATE TABLE `user`;
 --
 -- Dumping data for table `user`
 --
