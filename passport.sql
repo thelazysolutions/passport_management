@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `document` (
   `received_in_pt_date` date DEFAULT NULL,
   `submitted_date` date DEFAULT NULL,
   `concluded_date` date DEFAULT NULL,
-  `doc_issue_date` date DEFAULT NULL DEFAULT CURRENT_TIMESTAMP,
+  `doc_issue_date` date DEFAULT NULL,
   `reg_bill` text DEFAULT NULL,
   `submitted` text DEFAULT NULL,
   `attachment` text DEFAULT NULL,
