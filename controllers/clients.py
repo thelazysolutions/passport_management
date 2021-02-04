@@ -1,6 +1,6 @@
 from flask import Flask, Blueprint, request
 from db.database import Client, connection, select, delete, insert, update, metadata
-
+import inspect
 client = Blueprint('client', __name__, template_folder='templates')
 
 
@@ -16,6 +16,7 @@ def list_to_json(list):
         JSON
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     op = {}
     for (a, b) in zip((Client.c.keys()), list):
         op[a] = str(b).replace('client.', '')
@@ -24,6 +25,7 @@ def list_to_json(list):
 
 @client.route('/test/', methods=["GET", "POST"])
 def viewTableAll():
+    print(inspect.stack()[1][3])
     obj = {}
     for key in Client.c.keys():
         obj[key] = '1'
@@ -40,11 +42,13 @@ def viewAll():
         client data in a String (Do in JSON)
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     query = select([Client])
     ResultProxy = connection.execute(query)
     ResultSet = ResultProxy.fetchall()
     res = []
     for rs in ResultSet:
+        print(rs)
         res.append(list_to_json(rs))
     return dict(enumerate(res))
 
@@ -61,11 +65,13 @@ def viewOne(id):
         Empty string Message
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     query = select([Client]).where(Client.columns.id == id)
     ResultProxy = connection.execute(query)
     ResultSet = ResultProxy.fetchone()
     if(not ResultSet):
         return {'error': 'Unable to find the given client'}
+    print(ResultSet)
     return list_to_json(ResultSet)
 
 
@@ -81,11 +87,14 @@ def deleteOne(id):
         Empty ID Message
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     query = Client.delete().where(Client.columns.id == id)
     ResultProxy = connection.execute(query)
     if(not ResultProxy):
+        print('Unable to find the given client')
         return {'error': 'Unable to find the given client'}
-    return {'status': "Delete Succesful"}
+    print("Delete Succesful for ID: " + str(id))
+    return {'status': "Delete Succesful for ID: " + str(id)}
 
 
 @client.route('/<id>', methods=["PUT"])
@@ -101,12 +110,14 @@ def updateOne(id):
         [type]: [description]
     """
     # read data from the API call
+    print(inspect.stack()[1][3])
     req_data = request.get_json()
-
+    print(req_data)
     query = select([Client]).where(Client.columns.id == id)
     ResultProxy = connection.execute(query)
     ResultSet = ResultProxy.fetchone()
     if(not ResultSet):
+        print('Unable to find the given client')
         return {'error': 'Unable to Find the given client'}
 
     # Update the URL
@@ -123,7 +134,9 @@ def updateOne(id):
     )
     ResultProxy = connection.execute(query)
     if(not ResultProxy):
+        print("unable to update client")
         return {'error': 'Unable to Update the given client'}
+    print("Update Succesful")
     return {'status': "Update Succesful"}
 
 
@@ -140,18 +153,21 @@ def addOne():
         [type]: [description]
     """
     # read data from the API call
+    print(inspect.stack()[1][3])
     req_data = request.get_json()
+    print(req_data)
     json_data = {}
 
     for req in req_data:
         if (req in Client.c.keys()):
             json_data[req] = req_data[req]
-
     query = (
         insert(Client).
         values(json_data)
     )
     ResultProxy = connection.execute(query)
     if(not ResultProxy):
+        print("Unable to Add Client")
         return {'error': 'Unable to Add the given client'}
+    print("Add Succesful")
     return {'status': "Adding Succesful"}

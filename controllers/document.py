@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename
 import os
 import boto3
 import botocore
+import inspect
 document = Blueprint('Document', __name__, template_folder='templates')
 load_dotenv()
 
@@ -27,6 +28,7 @@ def list_to_json(list):
         JSON
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     op = {}
     for (a, b) in zip((Document.c.keys()), list):
         op[a] = str(b).replace('document.', '')
@@ -35,6 +37,7 @@ def list_to_json(list):
 
 @document.route('/test', methods=["GET", "POST"])
 def test():
+    print(inspect.stack()[1][3])
     obj = {}
     for key in Document.c.keys():
         obj[key] = '1'
@@ -51,11 +54,13 @@ def viewAll():
         document data in a String (Do in JSON)
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     query = select([Document])
     ResultProxy = connection.execute(query)
     ResultSet = ResultProxy.fetchall()
     res = []
     for rs in ResultSet:
+        print(rs)
         res.append(list_to_json(rs))
     return dict(enumerate(res))
 
@@ -72,11 +77,14 @@ def viewOne(id):
         Empty string Message
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     query = select([Document]).where(Document.columns.id == id)
     ResultProxy = connection.execute(query)
     ResultSet = ResultProxy.fetchone()
     if(not ResultSet):
+        print("Unable to find document")
         return {'error': 'Unable to find the given document'}
+    print(ResultSet)
     return list_to_json(ResultSet)
 
 
@@ -92,11 +100,14 @@ def deleteOne(id):
         Empty ID Message
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     query = Document.delete().where(Document.columns.id == id)
     ResultProxy = connection.execute(query)
     if(not ResultProxy):
+        print("Unable to Delete")
         return {'error': 'Unable to find the given document'}
-    return {'status': "Delete Succesful"}
+    print("Delete Succesful for id: "+ str(id))
+    return {'status': "Delete Succesful for id: "+ str(id)}
 
 
 @document.route('/<id>', methods=["PUT"])
@@ -111,13 +122,16 @@ def updateOne(id):
         Empty string Message
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     # read data from the API call
     req_data = request.get_json()
+    print(req_data)
 
     query = select([Document]).where(Document.columns.id == id)
     ResultProxy = connection.execute(query)
     ResultSet = ResultProxy.fetchone()
     if(not ResultSet):
+        print('Unable to find the given document')
         return {'error': 'Unable to find the given document'}
 
     json_data = {}
@@ -135,7 +149,9 @@ def updateOne(id):
         )
         ResultProxy = connection.execute(query)
         if(not ResultProxy):
+            print('Unable to Update the given document')
             return {'error': 'Unable to Update the given document'}
+        print('Update document Succesful')
         return {'status': "Update Succesful"}
 
     return {'status': "No new entries to be updated"}
@@ -153,10 +169,11 @@ def addOne():
         Empty string Message
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     # read data from the API call
     req_data = request.get_json()
     # check for Document_type
-
+    print(req_data)
     json_data = {}
 
     for req in req_data:
@@ -171,7 +188,9 @@ def addOne():
         )
         ResultProxy = connection.execute(query)
         if(not ResultProxy):
+            print('Unable to Add the given document')
             return {'error': 'Unable to Add the given document'}
+        print('Add document Succesful')
         return {'status': "Adding Succesful"}
     return {'error': 'Unable to Add the given document'}
 
@@ -188,6 +207,7 @@ def addFile():
         Empty string Message
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
 
     try:
         f = request.files['file']
@@ -199,6 +219,7 @@ def addFile():
             os.remove(os.path.join('files', filename))
         except OSError:
             pass
+        print('Document Upload Succesful')
         return {'url': str(output)}
 
     except:
@@ -216,6 +237,7 @@ def getFile():
         Empty string Message
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     # read data from the API call
 
     # Read S3 URL,
@@ -233,8 +255,10 @@ def getFile():
 
 def upload_file_to_s3(file, bucket_name, acl="public-read"):
     """
+	print(inspect.stack()[1][3])
     Docs: http://boto3.readthedocs.io/en/latest/guide/s3.html
     """
+    print(inspect.stack()[1][3])
     try:
         s3.upload_fileobj(
             file,
@@ -248,4 +272,5 @@ def upload_file_to_s3(file, bucket_name, acl="public-read"):
     except Exception as e:
         print("Something Happened: ", e)
         return e
+    print('Document Upload Succesful')
     return "{}{}".format("https://"+os.getenv('AWS_bucket_id')+".s3.amazonaws.com/", file.filename)

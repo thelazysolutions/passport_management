@@ -9,7 +9,7 @@ from controllers.document import document
 from controllers.reminder import reminder
 from controllers.followup import followup
 from sqlalchemy import create_engine, MetaData, Table, Column, select, insert, and_, update
-
+import inspect
 from db.database import Client,User,connection
 load_dotenv()
 
@@ -35,6 +35,8 @@ def home(result=None):
         render_template
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
+
     if not session.get('logged_in') and not result:
         return render_template('login.html')
     else:
@@ -52,6 +54,7 @@ def test(done = None):
     Returns:
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     if(done):
         flash('New Entry Done!')
     return render_template('webpage/index1.html')
@@ -67,14 +70,12 @@ def do_login_login():
     function call to dashboard
         [type]: [description]
     """
-
+    print(inspect.stack()[1][3])
+    print(request.form)
     query = select([User]).where(and_(User.columns.email == request.form['email'],User.columns.password==request.form['password'] ))
     ResultProxy = connection.execute(query)
     ResultSet = ResultProxy.fetchone()
-    result = ResultSet
-    # result = User.query.filter_by(
-    #     password=request.form['password'], email=request.form['email']).first()
-    if result:
+    if ResultSet:
         session['logged_in'] = True
     else:
         flash('wrong password!')
@@ -90,6 +91,7 @@ def logout():
         home() ==> Login page
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     session['logged_in'] = False
     return home()
 
@@ -102,6 +104,7 @@ def foo():
     function call to test page
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     print(request.form)
     data = request.form.to_dict()
     print(data)

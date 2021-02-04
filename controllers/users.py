@@ -1,6 +1,8 @@
 from flask import Flask, Blueprint, request
 from db.database import Client, User, connection, select, delete, insert, update, and_
 
+import inspect
+
 user = Blueprint('User', __name__, template_folder='templates')
 
 
@@ -16,6 +18,7 @@ def list_to_json(list):
         JSON
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     op = {}
     for (a, b) in zip((User.c.keys()), list):
         op[a] = str(b).replace('user.', '')
@@ -33,8 +36,9 @@ def do_login():
     function call to dashboard
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     req_data = request.get_json()
-
+    print(req_data)
     if('name' in req_data and 'password' in req_data):
         # check for User_type
 
@@ -43,10 +47,13 @@ def do_login():
         ResultProxy = connection.execute(query)
         ResultSet = ResultProxy.fetchone()
         if(not ResultSet):
+            print('Unable to find the user for Login')
             return {'error': 'Unable to find the user for Login'}
 
+        print(list_to_json(ResultSet))
         return {'success': ' User logs in', 'user_id': list_to_json(ResultSet)}
 
+    print('Cannot login')
     return {'error': 'Cannot Login'}
 
 
@@ -60,11 +67,13 @@ def viewAll():
         user data in a String (Do in JSON)
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     query = select([User])
     ResultProxy = connection.execute(query)
     ResultSet = ResultProxy.fetchall()
     res = []
     for rs in ResultSet:
+        print(rs)
         res.append(list_to_json(rs))
     return dict(enumerate(res))
 
@@ -81,11 +90,13 @@ def viewOne(id):
         Empty string Message
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     query = select([User]).where(User.columns.id == id)
     ResultProxy = connection.execute(query)
     ResultSet = ResultProxy.fetchone()
     if(not ResultSet):
         return {'error': 'Unable to find the given user'}
+    print(ResultSet)
     return list_to_json(ResultSet)
 
 
@@ -101,11 +112,14 @@ def deleteOne(id):
         Empty ID Message
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     query = User.delete().where(User.columns.id == id)
     ResultProxy = connection.execute(query)
     if(not ResultProxy):
+        print('Unable to find the given user')
         return {'error': 'Unable to find the given user'}
-    return {'status': "Delete Succesful"}
+    print("Delete Succesful for ID: " + str(id))
+    return {'status': "Delete Succesful for ID: " + str(id)}
 
 
 @user.route('/<id>', methods=["PUT"])
@@ -120,9 +134,10 @@ def updateOne(id):
         Empty string Message
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     # read data from the API call
     req_data = request.get_json()
-
+    print(req_data)
     query = select([User]).where(User.columns.id == id)
     ResultProxy = connection.execute(query)
     ResultSet = ResultProxy.fetchone()
@@ -144,9 +159,11 @@ def updateOne(id):
         )
         ResultProxy = connection.execute(query)
         if(not ResultProxy):
+            print('Unable to Update the given user')
             return {'error': 'Unable to Update the given user'}
+        print("Update Succesful for object "+id)
         return {'status': "Update Succesful for object "+id}
-
+    print("No new entries to be updated")
     return {'status': "No new entries to be updated"}
 
 
@@ -163,19 +180,20 @@ def addOne():
         [type]: [description]
     """
     # read data from the API call
+    print(inspect.stack()[1][3])
     req_data = request.get_json()
-
+    print(req_data)
     if(req_data):
         if('name' in req_data and 'email' in req_data and 'password' in req_data and 'user_type' in req_data):
-            # check for User_type
-
             query = (
                 insert(User).
                 values(req_data)
             )
             ResultProxy = connection.execute(query)
             if(not ResultProxy):
+                print('Unable to Add the given user')
                 return {'error': 'Unable to Add the given user'}
+            print("Adding Succesful")
             return {'status': "Adding Succesful"}
 
     return {'error': 'Cannot add new value'}

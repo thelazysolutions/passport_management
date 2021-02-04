@@ -1,6 +1,6 @@
 from flask import Flask, Blueprint, request
 from db.database import Followup, connection, select, delete, insert, update, metadata
-
+import inspect
 followup = Blueprint('followup', __name__, template_folder='templates')
 
 
@@ -16,14 +16,16 @@ def list_to_json(list):
         JSON
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     op = {}
     for (a, b) in zip((Followup.c.keys()), list):
-         op[a] = str(b).replace('client.', '')
+         op[a] = str(b).replace('followup.', '')
     return op
 
 
 @followup.route('/test/', methods=["GET", "POST"])
 def viewTableAll():
+    print(inspect.stack()[1][3])
     a = []
     for c in Followup.c:
         a.append(str(c))
@@ -39,6 +41,7 @@ def viewAll():
         client data in a String (Do in JSON)
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     query = select([Followup])
     ResultProxy = connection.execute(query)
     ResultSet = ResultProxy.fetchall()
@@ -59,6 +62,7 @@ def viewOne(id):
         Empty string Message
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     query = select([Followup]).where(Followup.columns.id == id)
     ResultProxy = connection.execute(query)
     ResultSet = ResultProxy.fetchone()
@@ -78,10 +82,10 @@ def deleteOne(id):
         Empty ID Message
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     query = Followup.delete().where(Followup.columns.id == id)
     ResultProxy = connection.execute(query)
-    ResultSet = ResultProxy.fetchall()
-    if(not ResultSet):
+    if(not ResultProxy):
         return {'error': 'Unable to find the given client'}
     return {'status': "Delete Succesful"}
 
@@ -97,6 +101,7 @@ def updateOne(id):
         Empty string Message
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     # read data from the API call
     req_data = request.get_json()
 
@@ -135,6 +140,7 @@ def addOne():
         Empty string Message
         [type]: [description]
     """
+    print(inspect.stack()[1][3])
     # read data from the API call
     req_data = request.get_json()
     json_data = {}

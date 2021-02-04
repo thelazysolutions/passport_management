@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 08, 2021 at 12:40 PM
+-- Generation Time: Feb 04, 2021 at 01:58 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.4.13
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `passport`
 --
-CREATE DATABASE IF NOT EXISTS `passport` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `passport`;
 
 -- --------------------------------------------------------
 
@@ -30,29 +28,31 @@ USE `passport`;
 --
 
 DROP TABLE IF EXISTS `client`;
-CREATE TABLE `client` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `client` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `number` varchar(15) NOT NULL,
   `number_alt` varchar(15) DEFAULT NULL,
   `email` varchar(100) NOT NULL,
   `email_alt` varchar(100) DEFAULT NULL,
-  `location` varchar(50) NOT NULL,
-  `first_contact_date` datetime NOT NULL,
-  `source` varchar(20) NOT NULL,
-  `referred_by` varchar(30) NOT NULL,
-  `process_type` varchar(20) NOT NULL,
-  `first_registration_of` varchar(30) NOT NULL,
-  `lead_type` varchar(20) NOT NULL,
-  `search_required` tinyint(1) NOT NULL,
-  `assigned_to` varchar(30) NOT NULL,
-  `search_location` varchar(30) NOT NULL,
-  `search_taluka` varchar(30) NOT NULL,
-  `wa_group` tinyint(1) NOT NULL,
-  `wa_group_name` varchar(30) NOT NULL,
+  `location` varchar(50) DEFAULT NULL,
+  `first_contact_date` date DEFAULT current_timestamp(),
+  `source` varchar(20) DEFAULT NULL,
+  `referred_by` varchar(30) DEFAULT NULL,
+  `process_type` varchar(20) DEFAULT NULL,
+  `first_registration_of` varchar(30) DEFAULT NULL,
+  `lead_type` varchar(20) DEFAULT NULL,
+  `search_required` varchar(5) DEFAULT NULL,
+  `assigned_to` varchar(30) DEFAULT NULL,
+  `search_location` varchar(30) DEFAULT NULL,
+  `search_taluka` varchar(30) DEFAULT NULL,
+  `wa_group` varchar(5) DEFAULT NULL,
+  `wa_group_name` varchar(30) DEFAULT NULL,
+  `address` text DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -61,8 +61,8 @@ CREATE TABLE `client` (
 --
 
 DROP TABLE IF EXISTS `document`;
-CREATE TABLE `document` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `document` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `client_id` int(11) NOT NULL,
   `registration` text NOT NULL,
   `to_register` text NOT NULL,
@@ -70,28 +70,31 @@ CREATE TABLE `document` (
   `document_of` text NOT NULL,
   `name` text NOT NULL,
   `place` text NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp(),
-  `registered_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `date` date NOT NULL DEFAULT current_timestamp(),
+  `registered_date` date NOT NULL DEFAULT current_timestamp(),
   `doc_available` text NOT NULL,
   `doc_in_office` text NOT NULL,
-  `sac_date` datetime NOT NULL,
-  `a/t_date` datetime NOT NULL,
-  `translation_date` datetime NOT NULL,
-  `notary_date` datetime NOT NULL,
-  `collector_date` datetime NOT NULL,
-  `apostle_date` datetime NOT NULL,
-  `send_to_pt_date` datetime NOT NULL,
-  `doc_reached_pt` datetime NOT NULL,
-  `received_in_pt_date` datetime NOT NULL,
-  `submitted_date` datetime NOT NULL,
-  `concluded_date` datetime NOT NULL,
+  `sac_date` date NOT NULL,
+  `a/t_date` date NOT NULL,
+  `translation_date` date NOT NULL,
+  `notary_date` date NOT NULL,
+  `collector_date` date NOT NULL,
+  `apostle_date` date NOT NULL,
+  `send_to_pt_date` date NOT NULL,
+  `doc_reached_pt` text NOT NULL,
+  `received_in_pt_date` date NOT NULL,
+  `submitted_date` date NOT NULL,
+  `concluded_date` date NOT NULL,
+  `doc_issue_date` date NOT NULL DEFAULT current_timestamp(),
+  `reg_bill` text NOT NULL,
   `submitted` text NOT NULL,
   `attachment` text NOT NULL,
   `comment` text NOT NULL,
   `billable` text NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -100,16 +103,17 @@ CREATE TABLE `document` (
 --
 
 DROP TABLE IF EXISTS `followup`;
-CREATE TABLE `followup` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `followup` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `followup_for` text NOT NULL,
   `type` text NOT NULL,
-  `date` datetime NOT NULL,
+  `date` date NOT NULL,
   `comments` text NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -118,15 +122,16 @@ CREATE TABLE `followup` (
 --
 
 DROP TABLE IF EXISTS `reminder`;
-CREATE TABLE `reminder` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `reminder` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `remind` text NOT NULL,
   `current_case_stage` text NOT NULL,
   `closed_by` text NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -135,83 +140,34 @@ CREATE TABLE `reminder` (
 --
 
 DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
   `user_type` int(11) NOT NULL DEFAULT 1,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4;
 
 --
--- Indexes for dumped tables
+-- Truncate table before insert `user`
 --
 
+TRUNCATE TABLE `user`;
 --
--- Indexes for table `client`
---
-ALTER TABLE `client`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `document`
---
-ALTER TABLE `document`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `followup`
---
-ALTER TABLE `followup`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `reminder`
---
-ALTER TABLE `reminder`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT for dumped tables
+-- Dumping data for table `user`
 --
 
---
--- AUTO_INCREMENT for table `client`
---
-ALTER TABLE `client`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `document`
---
-ALTER TABLE `document`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `followup`
---
-ALTER TABLE `followup`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `reminder`
---
-ALTER TABLE `reminder`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `user`
---
-ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+INSERT INTO `user` (`id`, `name`, `email`, `password`, `user_type`, `created_at`, `updated_at`) VALUES
+(9, '11Testing User', 'sass@test.com', 'Pass:1234', 1, '2020-12-29 18:46:46', '2020-12-29 18:48:18'),
+(10, 'New Employee', 'emp@emp.com', 'emp', 1, '2020-12-29 18:46:46', '2020-12-29 18:46:46'),
+(12, 'sasda', 'asddfs', 'sdffsd', 1, '2020-12-29 18:46:46', '2020-12-29 18:46:46'),
+(13, 'From the API', 'No email', 'add pwd', 2, '2020-12-29 18:46:46', '2020-12-29 18:46:46'),
+(14, 'From the API', 'No email', 'add pwd', 2, '2020-12-29 18:46:46', '2020-12-29 18:46:46'),
+(15, 'UasdI', 'dsa', 'fs sfd', 1, '2020-12-29 18:46:46', '2020-12-29 18:46:46'),
+(18, 'Joshua', 'dsa', 'test', 1, '2021-01-25 17:26:54', '2021-01-25 17:26:54');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
