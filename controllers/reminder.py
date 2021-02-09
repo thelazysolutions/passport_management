@@ -129,8 +129,7 @@ def updateOne(id):
         values(json_data)
     )
     ResultProxy = connection.execute(query)
-    ResultSet = ResultProxy.fetchall()
-    if(not ResultSet):
+    if(not ResultProxy):
         print("Unable to Update Reminder")
         return {'error': 'Unable to Update the given Reminder'}
     print("Update Succesful")
